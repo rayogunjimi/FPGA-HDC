@@ -23,6 +23,8 @@ def main():
 				filename_counter = filename_counter + 1
 			else:
 				print("invalid tag")
+			if (filename_counter >= 20):
+				break;
 	csv_file.close()
 
 if __name__ == "__main__":
