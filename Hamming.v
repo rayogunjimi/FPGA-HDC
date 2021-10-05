@@ -6,10 +6,9 @@ module Hamming(a, hamVector, spamVector, dist);
     integer countHam;
     integer countSpam;
 
-    countHam <= 0;
-    countSpam <= 0;
-
     initial begin
+        countHam <= 0;
+        countSpam <= 0;
         for (i=0; i<10000; i = i+1) begin
             if (a[i] ^ hamVector[i] == 1)
                 countHam = countHam + 1;
