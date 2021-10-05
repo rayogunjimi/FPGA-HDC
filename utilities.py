@@ -4,13 +4,13 @@ def genereate_filename_list(string1, string2 = "", string3 = ""):
 			if(string2 == ""):
 				output_file.write(string1 + str(counter) + "\n")
 			elif(string3 == ""):
-				output_file.write(string1 + str(counter) + string2 + "\n")
+				output_file.write(string1 + str(counter) + string2 + str(counter) + "\n")
 			else:
 				output_file.write(string1 + str(counter) + string2 + str(counter) + string3 + "\n")
 			
 
 def main():
-	genereate_filename_list("test_path_list[", "] = test_data/", ".txt;")
+	genereate_filename_list("data_path_list[", "] = \"data_dir/", "\";")
 	#genereate_filename_list("dictionary_path_list[", "] = disctionary_data/", "1.txt;")
 
 if __name__ == "__main__":
