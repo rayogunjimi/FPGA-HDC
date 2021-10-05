@@ -1,7 +1,7 @@
 `import main.v
-`timescale 1 ns/10 ps  // time-unit = 1 ns, precision = 10 ps
+// `timescale 1 ns/10 ps  // time-unit = 1 ns, precision = 10 ps
 
-module fpga_hdc_tb()
+module main_tb()
 
 // clk and reset initializations to synchronize modules
 reg clk = 0;
@@ -18,28 +18,28 @@ string data_path_list [0:numof_tests-1];
 string tag_path_list [0:numof_tests-1];
 string length_path_list [0:numof_tests-1];
 
-// file read handles
-integer data_file;
-integer tag_file;
-integer length_file;
+// file handles (descriptors)
+integer filedesc_data;
+integer filedesc_tag;
+integer filedesc_length;
 
-integer scan_file;
+integer status;
 
 // inputs to main function
 // vector of strings (max 160 characters per text) (max 32 bits/character)
-reg [31:0] input_data [159:0];
-reg input_label;
-reg input_length;
+reg [31:0] inputreg_data [159:0];
+reg inputreg_tag;
+reg inputreg_length;
 
 // output of main function
 wire output_classification;
 
 localparam period = 20;  
 
-	tokenizer_module DUT(.a(input_data));
+	tokenizer_module DUT(.a(inputreg_data));
 
 initial begin
-	// file paths
+
 	data_path_list[0] = "data_dir/0";
 	data_path_list[1] = "data_dir/1";
 	data_path_list[2] = "data_dir/2";
@@ -72,45 +72,54 @@ initial begin
 	length_path_list[7] = "length_dir/7";
 	length_path_list[8] = "length_dir/8";
 	length_path_list[9] = "length_dir/9";
-	
+/*	
 	for(i = 0; i < numof_tests; i = i + 1) begin
-		data_file = $fopen(data_path_list [i], "r");
-		tag_file = $fopen(tag_path_list [i], "r");
-		length_file = $fopen(length_path_list [i], "r");
-		if (data_file == `NULL) begin
-			$display("data_file handle was NULL");
-		end // if
-		else
-			$display("data_file read successfully");
-		end // else
+		filedesc_data = $fopen(data_path_list [i], "r");
+		filedesc_tag = $fopen(tag_path_list [i], "r");
+		filedesc_length = $fopen(length_path_list [i], "r");
 	end // for
+*/
+	filedesc_data = $fopen(data_path_list [0], "r");
+	filedesc_tag = $fopen(tag_path_list [0], "r");
+	filedesc_length = $fopen(length_path_list [0], "r");
+	
+	/*
+	status = $fscanf(filedesc_data, "%b", inputreg_data); 
+	status = $fscanf(filedesc_tag, "%b", inputreg_tag); 
+	status = $fscanf(filedesc_length, "%b", inputreg_length); 
+	*/
+	
+	$readmemb(data_path_list [0],inputreg_data);
+	$readmemb(tag_path_list [0],inputreg_tag);
+	$readmemb(length_path_list [0],inputreg_length);
 
-	scan_file = $fscanf(data_file, "%d\n", input_data); 
-	scan_file = $fscanf(label_file, "%d\n", input_tag); 
-	scan_file = $fscanf(length_file, "%d\n", input_length); 
-	if (!$feof(data_file)) begin
+	filedesc_data = $fclose(data_path_list [0], "r");
+	filedesc_tag = $fclose(tag_path_list [0], "r");
+	filedesc_length = $fclose(length_path_list [0], "r");
+
+	if (!$feof(filedesc_data)) begin
 		
 	end // if
 
 end // initial
 
-always @(posedge clk) begin
-
-	#period clk = ~clk;
-end // always
-
-// add logic to check return value (ham/spam) with disctonary
-// add logic to pass in diffierent hypervector instead of hard coded
-
 // call main module
 main U_main (
-input_data,
-input_tag,
-input_length,
+inputreg_data,
+inputreg_tag,
+inputreg_length,
 output_classification
 );
 
 end // module
+
+// always @(posedge clk) begin
+
+// 	#period clk = ~clk;
+// end // always
+
+// add logic to check return value (ham/spam) with disctonary
+// add logic to pass in diffierent hypervector instead of hard coded
 
 // forever begin
 // end // forever
