@@ -18,7 +18,7 @@ parameter MAX_LENGTH = 160;
 // file paths
 reg [8*10:0] data_path_list [numof_tests-1:0];
 reg [8*9:0] tag_path_list [numof_tests-1:0];
-reg [8*11:0] length_path_list [numof_tests-1:0];
+reg [8*12:0] length_path_list [numof_tests-1:0];
 
 // file descriptor handles
 integer filedesc_data;
@@ -30,10 +30,10 @@ integer status;
 // inputs to main function
 // vector of strings (max: 160 characters/text) (max: 32 bits/character)
 // reg [31:0] inputreg_data [159:0];
-reg [MAX_LENGTH*7-1:0] inputreg_data;
-reg [MAX_LENGTH*7-1:0] inputreg_tag;
+reg [MAX_LENGTH*7-1:0] inputreg_data [0:0];
+reg [MAX_LENGTH*7-1:0] inputreg_tag [0:0];
 // reg inputreg_tag;
-reg inputreg_length;
+reg [0:0] inputreg_length [0:0];
 
 
 // output of main function
@@ -82,15 +82,14 @@ initial begin
 	end // for
 	*/
 
-	filedesc_data = $fopen(data_path_list [0], "r");
-	filedesc_tag = $fopen(tag_path_list [0], "r");
-	filedesc_length = $fopen(length_path_list [0], "r");
+	//filedesc_data = $fopen(data_path_list [0], "r");
+	//filedesc_tag = $fopen(tag_path_list [0], "r");
+	//filedesc_length = $fopen(length_path_list [0], "r");
 
-	/*
-	status = $fscanf(filedesc_data, "%b", inputreg_data); 
-	status = $fscanf(filedesc_tag, "%b", inputreg_tag); 
-	status = $fscanf(filedesc_length, "%b", inputreg_length); 
-	*/
+	
+	//status = $fscanf(filedesc_data, "%b", inputreg_data); 
+	//status = $fscanf(filedesc_tag, "%b", inputreg_tag); 
+	///tatus = $fscanf(filedesc_length, "%b", inputreg_length); 
 
 	$readmemb(data_path_list [0],inputreg_data);
 	$readmemb(tag_path_list [0],inputreg_tag);
@@ -103,9 +102,9 @@ initial begin
 end // initial
 
 main U_main (
-inputreg_data,
-inputreg_length,
-inputreg_tag,
+inputreg_data[0],
+inputreg_length[0],
+inputreg_tag[0],
 output_label
 );
 
