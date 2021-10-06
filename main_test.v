@@ -12,20 +12,20 @@ module main (msg, length, label, result);
     input length;
     input[MAX_LENGTH*7:0] label;
     output reg signed [1:0] result;
-    parameter len = 20;
+    // parameter length = 20;
 
     integer i;
     integer seed = 20;
     real sum = 0;
     real avg = 0;
 
-    reg[MAX_LENGTH*7:0] char; // used for testing part of code only, use the input msg for testbench
+    // reg[MAX_LENGTH*7:0] char; // used for testing part of code only, use the input msg for testbench
     reg[7:0] letter;
     reg[7:0] lower_letter;
     reg signed[31:0] HV[DIM-1:0];
     reg[31:0] msgVector[DIM-1:0];
     reg[31:0] dictMem[NUM_CHAR-1:0][DIM-1:0]; // change to [10000:0] later
-    reg[31:0] num_msg[len-1:0]; // range should be determined by the input "length"
+    reg[31:0] num_msg[MAX_LENGTH:0]; // range should be determined by the input "length"
 
     reg[31:0] hamVector[DIM-1:0];
     reg[31:0] spamVector[DIM-1:0];
@@ -33,11 +33,11 @@ module main (msg, length, label, result);
     initial begin
         $readmemb("refMem_Ham_Binary.txt", hamVector, 0, DIM-1);
         $readmemb("refMem_Spam_Binary.txt", spamVector, 0, DIM-1);
-        char = "Shenda xxxxx Nonono."; // Used for testing part only
+        // char = "Shenda xxxxx NOnono.";
         // In the for loop, the range of i is from 0 to (total_bits of the message - 1)
         // 95 needs to be changed to a variable
-        for (i = 0; i < len*8-1 ; i = i + BITS_PER_CHAR) begin 
-            letter = char[i+:8];
+        for (i = 0; i < length*8-1 ; i = i + BITS_PER_CHAR) begin 
+            letter = msg[i+:8];
             // $display("%d, %c", letter, letter);
             lower_letter = to_lower(letter);
             // $display("%d, %c", lower_letter, lower_letter);
@@ -103,10 +103,10 @@ module main (msg, length, label, result);
 
             // In the for loop, the range of i is from 0 to (total_chars in msg)
             // 12 needs to be changed to a variable
-            for (i = 0; i < len; i = i + 1 ) begin // sum each unit together
+            for (i = 0; i < length; i = i + 1 ) begin // sum each unit together
                 for (j = 0; j < dim ; j = j + 1 ) begin
                     HV[j] = HV[j] + dictMem[num_msg[i]][j];
-                    if (i==(len-1)) begin // 11 needs to change to the length of num_msg
+                    if (i==(length-1)) begin // 11 needs to change to the length of num_msg
                         sum = sum + HV[j];
                     end
                 end 
@@ -137,7 +137,7 @@ module main (msg, length, label, result);
         begin
             countHam = 0;
             countSpam = 0;
-            for (i = 0; i < 10000; i = i + 1) begin
+            for (i = 0; i < DIM; i = i + 1) begin
                 for (j = 0; j < 32 ; j = j + 1) begin
                     if (msgVector[i][j] ^ hamVector[i][j] == 1) begin
                         countHam = countHam + 1;
