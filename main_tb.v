@@ -1,4 +1,4 @@
-`include "main.v"
+`include "main_test.v"
 
 module main_tb;
 
@@ -16,9 +16,9 @@ parameter numof_tests = 10;
 parameter MAX_LENGTH = 160;
 
 // file paths
-reg [8*10:0] data_path_list [numof_tests-1:0];
-reg [8*9:0] tag_path_list [numof_tests-1:0];
-reg [8*12:0] length_path_list [numof_tests-1:0];
+reg [8*11:0] data_path_list [numof_tests-1:0];
+reg [8*10:0] tag_path_list [numof_tests-1:0];
+reg [8*13:0] length_path_list [numof_tests-1:0];
 
 // file descriptor handles
 integer filedesc_data;
@@ -30,16 +30,21 @@ integer status;
 // inputs to main function
 // vector of strings (max: 160 characters/text) (max: 32 bits/character)
 // reg [31:0] inputreg_data [159:0];
-reg [MAX_LENGTH*7-1:0] inputreg_data [0:0];
-reg [MAX_LENGTH*7-1:0] inputreg_tag [0:0];
+reg [MAX_LENGTH*8-1:0] inputreg_data [0:0];
+reg [MAX_LENGTH*8-1:0] inputreg_tag [0:0];
 // reg inputreg_tag;
 reg [0:0] inputreg_length [0:0];
 
 
 // output of main function
-wire [MAX_LENGTH*7-1:0] output_label;
+wire [1:0] output_label;
+
+
+
 
 initial begin
+
+	clk = 1; #5; clk = 0; #5;
 
 	data_path_list[0] = "data_dir/0";
 	data_path_list[1] = "data_dir/1";
@@ -50,7 +55,7 @@ initial begin
 	data_path_list[6] = "data_dir/6";
 	data_path_list[7] = "data_dir/7";
 	data_path_list[8] = "data_dir/8";
-	data_path_list[9] = "data_dir/9";
+	data_path_list[9] = "data_dir/19";
 	
 	tag_path_list[0] = "tag_dir/0";
 	tag_path_list[1] = "tag_dir/1";
@@ -61,7 +66,7 @@ initial begin
 	tag_path_list[6] = "tag_dir/6";
 	tag_path_list[7] = "tag_dir/7";
 	tag_path_list[8] = "tag_dir/8";
-	tag_path_list[9] = "tag_dir/9";
+	tag_path_list[9] = "tag_dir/19";
 
 	length_path_list[0] = "length_dir/0";
 	length_path_list[1] = "length_dir/1";
@@ -72,7 +77,7 @@ initial begin
 	length_path_list[6] = "length_dir/6";
 	length_path_list[7] = "length_dir/7";
 	length_path_list[8] = "length_dir/8";
-	length_path_list[9] = "length_dir/9";
+	length_path_list[9] = "length_dir/19";
 
 	/*	
 	for(i = 0; i < numof_tests; i = i + 1) begin
@@ -91,17 +96,29 @@ initial begin
 	//status = $fscanf(filedesc_tag, "%b", inputreg_tag); 
 	///tatus = $fscanf(filedesc_length, "%b", inputreg_length); 
 
-	$readmemb(data_path_list [0],inputreg_data);
-	$readmemb(tag_path_list [0],inputreg_tag);
-	$readmemb(length_path_list [0],inputreg_length);
+	$readmemb(data_path_list [9],inputreg_data);
+	$readmemb(tag_path_list [9],inputreg_tag);
+	$readmemb(length_path_list [9],inputreg_length);
 
 	//filedesc_data = $fclose(data_path_list [0], "r");
 	//filedesc_tag = $fclose(tag_path_list [0], "r");
 	//filedesc_length = $fclose(length_path_list [0], "r");
 
+
+	$display(inputreg_data[0]);
+	
+
 end // initial
 
-main U_main (
+
+main U_main(
+.msg (inputreg_data[0]),
+.length (inputreg_length[0]),
+.label (inputreg_tag[0]),
+.result (output_label)
+);
+
+main dut(
 inputreg_data[0],
 inputreg_length[0],
 inputreg_tag[0],
