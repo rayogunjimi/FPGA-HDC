@@ -1,7 +1,6 @@
-`import main.v
-// `timescale 1 ns/10 ps  // time-unit = 1 ns, precision = 10 ps
+`include "main.v"
 
-module main_tb()
+module main_tb;
 
 // clk and reset initializations to synchronize modules
 reg clk = 0;
@@ -11,14 +10,17 @@ reg reset = 0;
 integer i;
 
 // number of tests
-integer numof_tests = 10;
+parameter numof_tests = 10;
+
+// length of message in characters
+parameter MAX_LENGTH = 160;
 
 // file paths
-string data_path_list [0:numof_tests-1];
-string tag_path_list [0:numof_tests-1];
-string length_path_list [0:numof_tests-1];
+reg [8*10:0] data_path_list [numof_tests-1:0];
+reg [8*9:0] tag_path_list [numof_tests-1:0];
+reg [8*12:0] length_path_list [numof_tests-1:0];
 
-// file handles (descriptors)
+// file descriptor handles
 integer filedesc_data;
 integer filedesc_tag;
 integer filedesc_length;
@@ -26,17 +28,16 @@ integer filedesc_length;
 integer status;
 
 // inputs to main function
-// vector of strings (max 160 characters per text) (max 32 bits/character)
-reg [31:0] inputreg_data [159:0];
-reg inputreg_tag;
-reg inputreg_length;
+// vector of strings (max: 160 characters/text) (max: 32 bits/character)
+// reg [31:0] inputreg_data [159:0];
+reg [MAX_LENGTH*7-1:0] inputreg_data [0:0];
+reg [MAX_LENGTH*7-1:0] inputreg_tag [0:0];
+// reg inputreg_tag;
+reg [0:0] inputreg_length [0:0];
+
 
 // output of main function
-wire output_classification;
-
-localparam period = 20;  
-
-	tokenizer_module DUT(.a(inputreg_data));
+wire [MAX_LENGTH*7-1:0] output_label;
 
 initial begin
 
@@ -72,54 +73,60 @@ initial begin
 	length_path_list[7] = "length_dir/7";
 	length_path_list[8] = "length_dir/8";
 	length_path_list[9] = "length_dir/9";
-/*	
+
+	/*	
 	for(i = 0; i < numof_tests; i = i + 1) begin
 		filedesc_data = $fopen(data_path_list [i], "r");
 		filedesc_tag = $fopen(tag_path_list [i], "r");
 		filedesc_length = $fopen(length_path_list [i], "r");
 	end // for
-*/
-	filedesc_data = $fopen(data_path_list [0], "r");
-	filedesc_tag = $fopen(tag_path_list [0], "r");
-	filedesc_length = $fopen(length_path_list [0], "r");
-	
-	/*
-	status = $fscanf(filedesc_data, "%b", inputreg_data); 
-	status = $fscanf(filedesc_tag, "%b", inputreg_tag); 
-	status = $fscanf(filedesc_length, "%b", inputreg_length); 
 	*/
+
+	//filedesc_data = $fopen(data_path_list [0], "r");
+	//filedesc_tag = $fopen(tag_path_list [0], "r");
+	//filedesc_length = $fopen(length_path_list [0], "r");
+
 	
+	//status = $fscanf(filedesc_data, "%b", inputreg_data); 
+	//status = $fscanf(filedesc_tag, "%b", inputreg_tag); 
+	///tatus = $fscanf(filedesc_length, "%b", inputreg_length); 
+
 	$readmemb(data_path_list [0],inputreg_data);
 	$readmemb(tag_path_list [0],inputreg_tag);
 	$readmemb(length_path_list [0],inputreg_length);
 
-	filedesc_data = $fclose(data_path_list [0], "r");
-	filedesc_tag = $fclose(tag_path_list [0], "r");
-	filedesc_length = $fclose(length_path_list [0], "r");
-
-	if (!$feof(filedesc_data)) begin
-		
-	end // if
+	//filedesc_data = $fclose(data_path_list [0], "r");
+	//filedesc_tag = $fclose(tag_path_list [0], "r");
+	//filedesc_length = $fclose(length_path_list [0], "r");
 
 end // initial
 
-// call main module
 main U_main (
-inputreg_data,
-inputreg_tag,
-inputreg_length,
-output_classification
+inputreg_data[0],
+inputreg_length[0],
+inputreg_tag[0],
+output_label
 );
 
-end // module
+// @TODO
+// Remove input label
+// Add logic to check label and output parameter
+// Add logic to include HAM/SPAM hyper-vectors as input
+
+endmodule
+
+
+
+// if (!$feof(filedesc_data)) begin	
+// end // if
+// `timescale 1 ns/10 ps  // time-unit = 1 ns, precision = 10 ps
+// localparam period = 20;  
+// tokenizer_module DUT(.a(inputreg_data));
 
 // always @(posedge clk) begin
 
 // 	#period clk = ~clk;
 // end // always
-
-// add logic to check return value (ham/spam) with disctonary
-// add logic to pass in diffierent hypervector instead of hard coded
 
 // forever begin
 // end // forever
