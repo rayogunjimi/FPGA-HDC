@@ -1,4 +1,4 @@
-module main (msg, length, label);
+module main (msg, length, label, output_label);
     reg [1023:0] msgVector = 1024'h24c3b3f3ddb7ff8dec0c815c860e97ce29829c0cb677defaca09155439e81c4e554b5b4573e530b6d8c81c8a3d7faea63fdce5a5c1feacad2daf80a8913962bbc23dbb1ad2ea7ff7a1c79059a30b91554ef1ffaa9f5521c137dfcc8b5c2561c7485788b598afcd170aefd09e69654c36a6503f80f5563b4b37147fc3a909717d;
     reg [1023:0] hamVector = 1024'h6973ec44852c0b7dbe818b1252bb32f7d4e11ee67caec9c51a9114b01f45a541aa50870eca90d65bcdc8cd2a5dfc2a85d1ee44396d711e575a6b8b38a2a629f5d2877eb843580122b50e90fb1a05f1066348b7923810bf532aada6307bead6e69731715a2ec8ba9719955bd8c2171b9c5d24250ea22063e6fd6cabbb44dbb910;
     reg [1023:0] spamVector = 1024'hc74bd2f639636ac7c9b829681c97707b85b05aa2a7e1b8335ea06c79acca6274d594705e53b0d152895366dd7dc9610dff17b1f42a1fc6c3d5c87877a97ed34238bbcb11e1ba8b088d0047d9695588607a148cc4ea3cd19bb56d157dffe24892c1f934687d24cb69d682dec7277cc362f711a9d553867dac9819fcfff0d136c4;
@@ -8,9 +8,10 @@ module main (msg, length, label);
     parameter NUM_CHAR = 37;
     parameter DIM = 128;
     parameter BITS_PER_CHAR = 8;
-    input[MAX_LENGTH*7:0] msg;
+    input[MAX_LENGTH*7-1:0] msg;
     input length;
-    input[MAX_LENGTH*7:0] label;
+    input[MAX_LENGTH*7-1:0] label;
+    input[MAX_LENGTH*7-1:0] output_label;
 
     integer i;
     integer seed = 11;
