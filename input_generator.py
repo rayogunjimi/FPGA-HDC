@@ -1,21 +1,21 @@
 import csv
 def create_data(filename_counter, data):
-	with open("data_dir/" + str(filename_counter), "wb") as data_file:
-		data_file.write(bytes(data, 'utf-8'))
+	with open("data_dir/" + str(filename_counter), "w") as data_file:
+		data_file.write(''.join(format(ord(i), '08b') for i in data))
 		# data_file.write(data.encode('utf-8'))
 	data_file.close()
 
 def create_length(filename_counter, length):
-	with open("length_dir/" + str(filename_counter), "wb") as length_file:
-		length_file.write(length.to_bytes(4, byteorder ='big'))
+	with open("length_dir/" + str(filename_counter), "w") as length_file:
+		length_file.write(bin(length)[2:])
 	length_file.close()
 
 def create_tag(filename_counter, tag):
-	with open("tag_dir/" + str(filename_counter), "wb") as tag_file:
+	with open("tag_dir/" + str(filename_counter), "w") as tag_file:
 		if(tag == "ham"):
-			tag_file.write((0).to_bytes(4, byteorder ='big'))
+			tag_file.write(bin(0)[2:])
 		elif(tag == "spam"):
-			tag_file.write((1).to_bytes(4, byteorder ='big'))
+			tag_file.write(bin(1)[2:])
 	tag_file.close()
 
 def main():
