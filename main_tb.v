@@ -1,11 +1,12 @@
 `include "main_test.v"
-
+`timescale 1ns / 1ps
 
 module main_tb;
 
 // clk and reset initializations to synchronize modules
 reg clk = 0;
 reg reset = 0;
+integer counter;
 
 // loop variable
 integer i;
@@ -54,8 +55,8 @@ main U_main(
 // 	forever #1 clk=~clk;
 // end
 
-
 initial begin
+	counter = 0;
 
 	data_path_list[0] = "data_dir/0";
 	data_path_list[1] = "data_dir/1";
@@ -102,22 +103,21 @@ initial begin
 	//filedesc_tag = $fopen(tag_path_list [0], "r");
 	//filedesc_length = $fopen(length_path_list [0], "r");
 
-	
 	//status = $fscanf(filedesc_data, "%b", inputreg_data); 
 	//status = $fscanf(filedesc_tag, "%b", inputreg_tag); 
 	///tatus = $fscanf(filedesc_length, "%b", inputreg_length); 
-
-	$readmemb(data_path_list [4],inputreg_data);
-	$readmemb(tag_path_list [4],inputreg_tag);
-	$readmemb(length_path_list [4],inputreg_length);
 
 	//filedesc_data = $fclose(data_path_list [0], "r");
 	//filedesc_tag = $fclose(tag_path_list [0], "r");
 	//filedesc_length = $fclose(length_path_list [0], "r");
 
-
-	$display(inputreg_data[0]);
-	
+	repeat (10) begin
+		$readmemb(data_path_list [counter],inputreg_data);
+		$readmemb(tag_path_list [counter],inputreg_tag);
+		$readmemb(length_path_list [counter],inputreg_length);
+		#1000;
+		counter = counter + 1;
+	end
 
 end // initial
 // @TODO
