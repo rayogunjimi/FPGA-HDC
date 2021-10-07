@@ -1,5 +1,6 @@
 `include "main_test.v"
 
+
 module main_tb;
 
 // clk and reset initializations to synchronize modules
@@ -33,18 +34,28 @@ integer status;
 reg [MAX_LENGTH*8-1:0] inputreg_data [0:0];
 reg [MAX_LENGTH*8-1:0] inputreg_tag [0:0];
 // reg inputreg_tag;
-reg [0:0] inputreg_length [0:0];
+reg [7:0] inputreg_length [0:0];
 
 
 // output of main function
 wire [1:0] output_label;
 
+main U_main(
+.msg (inputreg_data[0]),
+.length (inputreg_length[0]),
+.label (inputreg_tag[0]),
+.clk (clk),
+.reset (reset),
+.result (output_label)
+);
 
+// initial begin
+//   	clk = 1'b0;
+// 	forever #1 clk=~clk;
+// end
 
 
 initial begin
-
-	clk = 1; #5; clk = 0; #5;
 
 	data_path_list[0] = "data_dir/0";
 	data_path_list[1] = "data_dir/1";
@@ -55,7 +66,7 @@ initial begin
 	data_path_list[6] = "data_dir/6";
 	data_path_list[7] = "data_dir/7";
 	data_path_list[8] = "data_dir/8";
-	data_path_list[9] = "data_dir/19";
+	data_path_list[9] = "data_dir/9";
 	
 	tag_path_list[0] = "tag_dir/0";
 	tag_path_list[1] = "tag_dir/1";
@@ -66,7 +77,7 @@ initial begin
 	tag_path_list[6] = "tag_dir/6";
 	tag_path_list[7] = "tag_dir/7";
 	tag_path_list[8] = "tag_dir/8";
-	tag_path_list[9] = "tag_dir/19";
+	tag_path_list[9] = "tag_dir/9";
 
 	length_path_list[0] = "length_dir/0";
 	length_path_list[1] = "length_dir/1";
@@ -77,7 +88,7 @@ initial begin
 	length_path_list[6] = "length_dir/6";
 	length_path_list[7] = "length_dir/7";
 	length_path_list[8] = "length_dir/8";
-	length_path_list[9] = "length_dir/19";
+	length_path_list[9] = "length_dir/9";
 
 	/*	
 	for(i = 0; i < numof_tests; i = i + 1) begin
@@ -96,9 +107,9 @@ initial begin
 	//status = $fscanf(filedesc_tag, "%b", inputreg_tag); 
 	///tatus = $fscanf(filedesc_length, "%b", inputreg_length); 
 
-	$readmemb(data_path_list [9],inputreg_data);
-	$readmemb(tag_path_list [9],inputreg_tag);
-	$readmemb(length_path_list [9],inputreg_length);
+	$readmemb(data_path_list [4],inputreg_data);
+	$readmemb(tag_path_list [4],inputreg_tag);
+	$readmemb(length_path_list [4],inputreg_length);
 
 	//filedesc_data = $fclose(data_path_list [0], "r");
 	//filedesc_tag = $fclose(tag_path_list [0], "r");
@@ -109,22 +120,6 @@ initial begin
 	
 
 end // initial
-
-
-main U_main(
-.msg (inputreg_data[0]),
-.length (inputreg_length[0]),
-.label (inputreg_tag[0]),
-.result (output_label)
-);
-
-main dut(
-inputreg_data[0],
-inputreg_length[0],
-inputreg_tag[0],
-output_label
-);
-
 // @TODO
 // Remove input label
 // Add logic to check label and output parameter

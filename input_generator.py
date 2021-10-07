@@ -13,9 +13,9 @@ def create_length(filename_counter, length):
 def create_tag(filename_counter, tag):
 	with open("tag_dir/" + str(filename_counter), "w") as tag_file:
 		if(tag == "ham"):
-			tag_file.write(bin(0)[2:])
-		elif(tag == "spam"):
 			tag_file.write(bin(1)[2:])
+		elif(tag == "spam"):
+			tag_file.write(bin(0)[2:])
 	tag_file.close()
 
 def main():
