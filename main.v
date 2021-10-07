@@ -11,14 +11,14 @@ module main (msg, length, label, clk, reset, result);
     parameter BITS_PER_CHAR = 8;
     input[MAX_LENGTH*8-1:0] msg;
     input[7:0] length;
-    input[MAX_LENGTH*8-1:0] label;
+    input[1:0] label;
     input clk, reset;
 
     output reg signed [1:0] result;
     // parameter length = 20;
 
     integer i;
-    integer seed = 15;
+    integer seed = 13;
     real sum;
     real avg;
 
@@ -74,7 +74,7 @@ module main (msg, length, label, clk, reset, result);
         result = 0;
         // hamming(msgVector, hamVector, spamVector, result);
         hamming(result);
-        $display("%b", result);
+        //$display("%b", result);
     end
 
     // Transform all characters to lower case
@@ -168,7 +168,8 @@ module main (msg, length, label, clk, reset, result);
             else begin
                 HamSpam = -1; // It can't make a prediction
             end
-            $display(countHam, countSpam);
+            $display("countSpam: %d", countSpam);
+            $display("countHam: %d", countHam);
         end
     endtask
 
