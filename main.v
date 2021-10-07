@@ -168,8 +168,8 @@ module main (msg, length, label, clk, reset, result);
             else begin
                 HamSpam = -1; // It can't make a prediction
             end
-            $display("countSpam: %d", countSpam);
-            $display("countHam: %d", countHam);
+            $display("countSpam = %2.0f", countSpam);
+            $display("countHam = %2.0f", countHam);
         end
     endtask
 

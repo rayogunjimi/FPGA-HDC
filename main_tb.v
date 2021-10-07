@@ -71,14 +71,14 @@ module main_tb();
 			$display("expected label = %b", inputreg_tag[0]);
 			$display("actual label = %b", output_label);
 			if (-1 == output_label) begin
-				$display("Incloncluive results.\n");
+				$display("incloncluive results.\n");
 			end
 			else if (inputreg_tag[0] == output_label) begin
-				$display("Results match.\n");
+				$display("results match.\n");
 				correct_counter = correct_counter + 1;
 			end
 			else if (inputreg_tag[0] != output_label) begin
-				$display("Results do not match.\n");
+				$display("results do not match.\n");
 			end
 			test_counter = test_counter + 1;
 		end // repeat
