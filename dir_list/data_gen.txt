@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 length_dir/0
 length_dir/1
 length_dir/2
@@ -17,3 +18,24 @@ length_dir/15
 length_dir/16
 length_dir/17
 length_dir/18
+=======
+data_dir/0
+data_dir/1
+data_dir/2
+data_dir/3
+data_dir/4
+data_dir/5
+data_dir/6
+data_dir/7
+data_dir/8
+data_dir/9
+data_dir/10
+data_dir/11
+data_dir/12
+data_dir/13
+data_dir/14
+data_dir/15
+data_dir/16
+data_dir/17
+data_dir/18
+>>>>>>> 70994d4d52873c1b4a8c4e886f7e6430a65ea15a
