@@ -30,7 +30,7 @@ def main():
 				filename_counter = filename_counter + 1
 			else:
 				print("invalid tag")
-			if (filename_counter >= 20):
+			if (filename_counter >= 1000):
 				break;
 	csv_file.close()
 
