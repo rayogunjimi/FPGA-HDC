@@ -36,7 +36,7 @@ module main (msg, length, label, clk, reset, result);
     reg signed[BITS_PER_INT-1:0] hamVector[DIM-1:0];
     reg signed[BITS_PER_INT-1:0] spamVector[DIM-1:0];
 
-    integer j = 0, k = 0, msgPtr;
+    integer j = 0;
 
     initial begin
         // Call the task to generate Item Memory
@@ -87,7 +87,7 @@ module main (msg, length, label, clk, reset, result);
         end
 
         for (k=0; k<DIM; k = k+1) begin
-          for(k1 = 0; k1 < 32; k1 = k1 +1) begin
+          for(k1 = 0; k1 < 16; k1 = k1 +1) begin
             $fwrite(msgPtr, "%b", msgVector[k][k1]);
             $fwrite(hamPtr, "%b", hamVector[k][k1]);
             $fwrite(spamPtr, "%b", spamVector[k][k1]);
