@@ -14,6 +14,13 @@ module main (msg, length, label, clk, reset, result);
     input[1:0] label;
     input clk, reset;
 
+    // Testing Data exported to Python
+    integer msgPtr;
+    integer hamPtr;
+    integer spamPtr;
+    integer k;
+    integer k1;
+
     output reg signed [1:0] result;
     // parameter length = 20;
 
@@ -34,6 +41,7 @@ module main (msg, length, label, clk, reset, result);
     reg[31:0] spamVector[DIM-1:0];
 
     always @(msg or length or label) begin
+
         sum = 0;
         avg = 0;
         $readmemb("refMem_Ham_Binary.txt", hamVector, 0, DIM-1);
@@ -68,6 +76,31 @@ module main (msg, length, label, clk, reset, result);
 
         // Call the task to perform encoding to generate HV for each tokenized message
         encoding(DIM);
+
+        msgPtr = $fopen("pythonCS/msg.txt", "w");
+        hamPtr = $fopen("pythonCS/ham.txt", "w");
+        spamPtr = $fopen("pythonCS/spam.txt", "w");
+        if (msgPtr == 0 || hamPtr == 0 || spamPtr == 0) begin               //If inputs file is not found
+            $display("Open files with ERROR");
+            $finish;
+        end
+
+        for (k=0; k<DIM; k = k+1) begin
+          for(k1 = 0; k1 < 32; k1 = k1 +1) begin
+            $fwrite(msgPtr, "%b", msgVector[k][k1]);
+            $fwrite(hamPtr, "%b", hamVector[k][k1]);
+            $fwrite(spamPtr, "%b", spamVector[k][k1]);
+          end
+          $fwrite(msgPtr, "\n");
+          $fwrite(hamPtr, "\n");
+          $fwrite(spamPtr, "\n");
+        end
+
+        $fclose(msgPtr);
+        $fclose(hamPtr);
+        $fclose(spamPtr);
+
+
 
         // $display("%h", msgVector);
         
