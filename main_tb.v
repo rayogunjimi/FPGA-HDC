@@ -11,10 +11,10 @@ module main_tb();
 	real correct_counter = 0;
 
 	// register size parameters
-	parameter MESSAGE_LENGTH = 160;
+	parameter MESSAGE_LENGTH = 200;
 	parameter CHAR_LENGTH = 8;
 	parameter PATH_LENGTH = 16;
-	parameter NUMOF_TESTS = 8;
+	parameter NUMOF_TESTS = 1;
 
 	// iterable file paths
 	reg [CHAR_LENGTH*PATH_LENGTH-1:0] data_path_list [NUMOF_TESTS-1:0];
@@ -46,14 +46,12 @@ module main_tb();
 			scan_data_inputs = $fscanf(data_inputs, "%s\n", data_path_list[test_counter]);
 			scan_tag_inputs = $fscanf(tag_inputs, "%s\n", tag_path_list[test_counter]);
 			scan_length_inputs = $fscanf(length_inputs, "%s\n", length_path_list[test_counter]);
-            $display ("Data :[inputs: %s]", data_path_list[test_counter]); 
-            $display ("Tag :[inputs: %s]", tag_path_list[test_counter]); 
-            $display ("Length :[inputs: %s]", length_path_list[test_counter]); 
+            $display ("Data :[inputs: %s]", data_path_list[test_counter]);
 
 			$readmemb(data_path_list [test_counter],inputreg_data);
 			$readmemb(tag_path_list [test_counter],inputreg_tag);
 			$readmemb(length_path_list [test_counter],inputreg_length);
-			#1000;
+			#1;
 			$display("expected label = %b", inputreg_tag[0]);
 			$display("actual label = %b", output_label);
 			if (-1 == output_label) begin
