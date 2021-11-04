@@ -19,6 +19,10 @@ module main (msg, length, label, clk, reset, result);
     integer k;
     integer k1;
 
+    real ss;
+    integer sum1;
+    integer i1;
+
     output reg signed [1:0] result;
 
     integer i;
@@ -104,7 +108,7 @@ module main (msg, length, label, clk, reset, result);
 
 
         // $display("%h", msgVector);
-        
+        sumNsquare(ss);
         result = 0;
         // hamming(msgVector, hamVector, spamVector, result);
         hamming(result);
@@ -177,6 +181,29 @@ module main (msg, length, label, clk, reset, result);
         end
     endtask
 
+    task sumNsquare;
+        real temp;
+        real sum1;
+        integer i1;
+        real idk;
+
+        output real ss;
+
+        begin
+            ss = 0;
+            sum1 = 0;
+            for(i1=0; i1<DIM; i1 = i1 + 1) begin
+                temp = hamVector[i1];
+                $display("Elem: %d", hamVector[i1]);
+                sum1 = hamVector[i1]*temp;
+                $display(sum1);
+                ss = ss + sum1;
+            end
+            $display("Sum & Square: %d", ss);
+
+        end
+    endtask
+
     task hamming;
         // input [9999:0] msgVector, hamVector, spamVector;
         output [1:0] HamSpam;
@@ -188,7 +215,7 @@ module main (msg, length, label, clk, reset, result);
             countHam = 0;
             countSpam = 0;
             for (i = 0; i < DIM; i = i + 1) begin
-                for (j = 0; j < 32 ; j = j + 1) begin
+                for (j = 0; j < 16 ; j = j + 1) begin
                     if (msgVector[i][j] ^ hamVector[i][j] == 1) begin
                         countHam = countHam + 1;
                     end 

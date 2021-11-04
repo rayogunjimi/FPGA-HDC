@@ -12,11 +12,11 @@ with open('./pythonCS/msg.txt') as x:
    for line in x:
       msgVector.append(line)
 
-with open('./pythonCS/ham.txt') as y:
+with open('./refMem_Ham_Binary.txt') as y:
    for line in y:
       hamVector.append(line)
 
-with open('./pythonCS/spam.txt') as z:
+with open('./refMem_Spam_Binary.txt') as z:
    for line in z:
       spamVector.append(line)
 
@@ -53,9 +53,15 @@ sumM = 0
 sumH = 0
 sumS = 0
 
+print(sumNsquare(intHVector, sumM))
+
 MVssr = math.sqrt(sumNsquare(intMVector, sumM))
 HVssr = math.sqrt(sumNsquare(intHVector, sumH))
 SVssr = math.sqrt(sumNsquare(intSVector, sumS))
+
+print(MVssr)
+print(HVssr)
+print(SVssr)
 
 dotMH = numpy.dot(intMVector, intHVector)
 dotMS = numpy.dot(intMVector, intSVector)
