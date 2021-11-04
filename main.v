@@ -12,6 +12,13 @@ module main (msg, length, label, clk, reset, result);
     input[1:0] label;
     input clk, reset;
 
+    // Testing Data exported to Python
+    integer msgPtr;
+    integer hamPtr;
+    integer spamPtr;
+    integer k;
+    integer k1;
+
     output reg signed [1:0] result;
 
     integer i;
@@ -29,7 +36,7 @@ module main (msg, length, label, clk, reset, result);
     reg signed[BITS_PER_INT-1:0] hamVector[DIM-1:0];
     reg signed[BITS_PER_INT-1:0] spamVector[DIM-1:0];
 
-    integer j = 0, k = 0, msgPtr;
+    integer j = 0;
 
     initial begin
         // Call the task to generate Item Memory
@@ -45,7 +52,6 @@ module main (msg, length, label, clk, reset, result);
     end
 
     always @(msg or length or label) begin
-        
         sum = 0;
         avg = 0;
         // In the for loop, the range of i is from 0 to (total_bits of the message - 1)
@@ -72,13 +78,32 @@ module main (msg, length, label, clk, reset, result);
         // Call the task to perform encoding to generate HV for each tokenized message
         encoding(DIM);
 
-        // Output Test Msg Vector
-        // msgPtr = $fopen("./msg.txt", "w");
-        // for(k=0; k<DIM; k=k+1) begin
-        //     $fwrite(msgPtr, "%16b", msgVector[k]);
-        //     $fwrite(msgPtr, "\n");
-        // end
-        // $fclose(msgPtr);
+        msgPtr = $fopen("pythonCS/msg.txt", "w");
+        hamPtr = $fopen("pythonCS/ham.txt", "w");
+        spamPtr = $fopen("pythonCS/spam.txt", "w");
+        if (msgPtr == 0 || hamPtr == 0 || spamPtr == 0) begin               //If inputs file is not found
+            $display("Open files with ERROR");
+            $finish;
+        end
+
+        for (k=0; k<DIM; k = k+1) begin
+          for(k1 = 0; k1 < 16; k1 = k1 +1) begin
+            $fwrite(msgPtr, "%b", msgVector[k][k1]);
+            $fwrite(hamPtr, "%b", hamVector[k][k1]);
+            $fwrite(spamPtr, "%b", spamVector[k][k1]);
+          end
+          $fwrite(msgPtr, "\n");
+          $fwrite(hamPtr, "\n");
+          $fwrite(spamPtr, "\n");
+        end
+
+        $fclose(msgPtr);
+        $fclose(hamPtr);
+        $fclose(spamPtr);
+
+
+
+        // $display("%h", msgVector);
         
         result = 0;
         // hamming(msgVector, hamVector, spamVector, result);
