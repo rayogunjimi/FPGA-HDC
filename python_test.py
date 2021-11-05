@@ -54,6 +54,7 @@ sumH = 0
 sumS = 0
 
 print(sumNsquare(intHVector, sumM))
+print(sumNsquare(intSVector, sumS))
 
 MVssr = math.sqrt(sumNsquare(intMVector, sumM))
 HVssr = math.sqrt(sumNsquare(intHVector, sumH))
@@ -65,6 +66,9 @@ print(SVssr)
 
 dotMH = numpy.dot(intMVector, intHVector)
 dotMS = numpy.dot(intMVector, intSVector)
+
+print("Dot prod ham", dotMH)
+print("Dot prod spam", dotMS)
 
 resultHam = dotMH/(MVssr*HVssr)
 resultSpam = dotMS/(MVssr*SVssr)
