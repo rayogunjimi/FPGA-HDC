@@ -19,6 +19,12 @@ module main (msg, length, label, clk, reset, result);
     integer k;
     integer k1;
 
+    real ssHam;
+    real ssSpam;
+
+    real prodHam;
+    real prodSpam;
+
     output reg signed [1:0] result;
 
     integer i;
@@ -104,7 +110,11 @@ module main (msg, length, label, clk, reset, result);
 
 
         // $display("%h", msgVector);
-        
+        sumNsquareHam(ssHam);
+        sumNsquareSpam(ssSpam);
+        dotprodHam(prodHam);
+        dotprodSpam(prodSpam);
+
         result = 0;
         // hamming(msgVector, hamVector, spamVector, result);
         hamming(result);
@@ -177,6 +187,86 @@ module main (msg, length, label, clk, reset, result);
         end
     endtask
 
+    task sumNsquareHam;
+        real temp;
+        real sum1;
+        integer i1;
+
+        output real ssHam;
+
+        begin
+            ssHam = 0;
+            sum1 = 0;
+            for(i1=0; i1<DIM; i1 = i1 + 1) begin
+                temp = hamVector[i1];
+                sum1 = hamVector[i1]*temp;
+                ssHam = ssHam + sum1;
+            end
+            $display("Sum & Square Ham: %d", ssHam);
+
+        end
+    endtask
+
+    task sumNsquareSpam;
+        real temp;
+        real sum1;
+        integer i1;
+
+        output real ssSpam;
+
+        begin
+            ssSpam = 0;
+            sum1 = 0;
+            for(i1=0; i1<DIM; i1 = i1 + 1) begin
+                temp = spamVector[i1];
+                sum1 = spamVector[i1]*temp;
+                ssSpam = ssSpam + sum1;
+            end
+            $display("Sum & Square Spam: %d", ssSpam);
+
+        end
+    endtask
+
+    task dotprodHam;
+        real sum;
+        real temp1;
+        real temp2;
+        integer i2;
+
+        output real prodHam;
+        begin
+            sum = 0;
+            prodHam = 0;
+          for (i2 = 0; i2<DIM; i2 = i2 + 1) begin
+            temp1 = hamVector[i2];
+            temp2 = msgVector[i2];
+            sum = temp1*temp2;
+            prodHam = prodHam + sum;
+          end
+          $display("Ham Dot Prod: %d", prodHam);
+        end
+    endtask
+
+    task dotprodSpam;
+        real sum;
+        real temp1;
+        real temp2;
+        integer i2;
+
+        output real prodSpam;
+        begin
+            sum = 0;
+            prodSpam = 0;
+          for (i2 = 0; i2<DIM; i2 = i2 + 1) begin
+            temp1 = spamVector[i2];
+            temp2 = msgVector[i2];
+            sum = temp1*temp2;
+            prodSpam = prodSpam + sum;
+          end
+          $display("Spam Dot Prod: %d", prodSpam);
+        end
+    endtask
+
     task hamming;
         // input [9999:0] msgVector, hamVector, spamVector;
         output [1:0] HamSpam;
@@ -188,7 +278,7 @@ module main (msg, length, label, clk, reset, result);
             countHam = 0;
             countSpam = 0;
             for (i = 0; i < DIM; i = i + 1) begin
-                for (j = 0; j < 32 ; j = j + 1) begin
+                for (j = 0; j < 16 ; j = j + 1) begin
                     if (msgVector[i][j] ^ hamVector[i][j] == 1) begin
                         countHam = countHam + 1;
                     end 
