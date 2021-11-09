@@ -84,29 +84,18 @@ module main (msg, length, label, clk, reset, result);
         // Call the task to perform encoding to generate HV for each tokenized message
         encoding(DIM);
 
-        msgPtr = $fopen("pythonCS/msg.txt", "w");
-        hamPtr = $fopen("pythonCS/ham.txt", "w");
-        spamPtr = $fopen("pythonCS/spam.txt", "w");
-        if (msgPtr == 0 || hamPtr == 0 || spamPtr == 0) begin               //If inputs file is not found
+        msgPtr = $fopen("msg.txt", "w");
+        if (msgPtr == 0) begin               //If inputs file is not found
             $display("Open files with ERROR");
             $finish;
         end
-
         for (k=0; k<DIM; k = k+1) begin
           for(k1 = 0; k1 < 16; k1 = k1 +1) begin
             $fwrite(msgPtr, "%b", msgVector[k][k1]);
-            $fwrite(hamPtr, "%b", hamVector[k][k1]);
-            $fwrite(spamPtr, "%b", spamVector[k][k1]);
           end
           $fwrite(msgPtr, "\n");
-          $fwrite(hamPtr, "\n");
-          $fwrite(spamPtr, "\n");
         end
-
         $fclose(msgPtr);
-        $fclose(hamPtr);
-        $fclose(spamPtr);
-
 
 
         // $display("%h", msgVector);
