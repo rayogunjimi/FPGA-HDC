@@ -1,4 +1,5 @@
-import csv
+import csv, os
+
 def create_data(filename_counter, data):
 	with open("data_dir/" + str(filename_counter), "w") as data_file:
 		data_file.write(''.join(format(ord(i), '08b') for i in data))
@@ -18,6 +19,19 @@ def create_tag(filename_counter, tag):
 			tag_file.write(bin(0)[2:])
 	tag_file.close()
 
+def create_path():
+	num_files = len(next(os.walk("./data_dir/"))[2])
+	f_data = open("./input_path_list/data_path.txt", "w")
+	f_length = open("./input_path_list/length_path.txt", "w")
+	f_tag = open("./input_path_list/tag_path.txt", "w")
+	for i in range (0, num_files):
+		f_data.write("data_dir/" + str(i) + "\n")
+		f_length.write("length_dir/" + str(i) + "\n")
+		f_tag.write("tag_dir/" + str(i) + "\n")
+	f_data.close()
+	f_length.close()
+	f_tag.close()
+
 def main():
 	with open('spam.csv', "r", encoding = "ISO-8859-1") as csv_file:
 		csv_matrix = csv.reader(csv_file)
@@ -33,6 +47,7 @@ def main():
 			if (filename_counter >= 1000):
 				break;
 	csv_file.close()
+	create_path()
 
 if __name__ == "__main__":
 	main()
