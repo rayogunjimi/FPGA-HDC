@@ -21,6 +21,9 @@ module main (msg, length, label, clk, reset, result);
 
     real ssHam;
     real ssSpam;
+    real normHam;
+    real normSpam;
+    real sqrt;
 
     real prodHam;
     real prodSpam;
@@ -114,6 +117,12 @@ module main (msg, length, label, clk, reset, result);
         sumNsquareSpam(ssSpam);
         dotprodHam(prodHam);
         dotprodSpam(prodSpam);
+        root(ssHam);
+        normHam = sqrt;
+        root(ssSpam);
+        normSpam = sqrt;
+        $display("Normalized Ham: %7.5f", normHam);
+        $display("Normalized Spam: %7.5f", normSpam);
 
         result = 0;
         // hamming(msgVector, hamVector, spamVector, result);
@@ -184,6 +193,37 @@ module main (msg, length, label, clk, reset, result);
                 // $display("%0d", HV[i]);
                 msgVector[i] = HV[i];
             end
+        end
+    endtask
+
+    task root;
+        input [63:0] num;  //declare input
+        //intermediate signals.
+        reg [63:0] a;
+        reg [30:0] q;
+        reg [33:0] left,right,r;    
+        integer i;
+        begin
+            //initialize all the variables.
+            a = num;
+            q = 0;
+            i = 0;
+            left = 0;   //input to adder/sub
+            right = 0;  //input to adder/sub
+            r = 0;  //remainder
+            //run the calculations for 16 iterations.
+            for(i=0;i<32;i=i+1) begin 
+                right = {q,r[33],1'b1};
+                left = {r[31:0],a[63:62]};
+                a = {a[61:0],2'b00};    //left shift by 2 bits.
+                if (r[33] == 1) //add if r is negative
+                    r = left + right;
+                else    //subtract if r is positive
+                    r = left - right;
+                q = {q[29:0],!r[33]};       
+            end
+            $display("Square Root: %7.2f", q);
+            sqrt = q;   //final assignment of output.
         end
     endtask
 
