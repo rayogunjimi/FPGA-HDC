@@ -21,12 +21,15 @@ module main (msg, length, label, clk, reset, result);
 
     real ssHam;
     real ssSpam;
-    real normHam;
-    real normSpam;
-    real sqrt;
-
+    real ssMsg;
     real prodHam;
     real prodSpam;
+    real normHam;
+    real normSpam;
+    real normMsg;
+    real sqrt;
+    real cosHam;
+    real cosSpam;
 
     output reg signed [1:0] result;
 
@@ -115,18 +118,23 @@ module main (msg, length, label, clk, reset, result);
         // $display("%h", msgVector);
         sumNsquareHam(ssHam);
         sumNsquareSpam(ssSpam);
+        sumNsquareMsg(ssMsg);
         dotprodHam(prodHam);
         dotprodSpam(prodSpam);
         root(ssHam);
         normHam = sqrt;
         root(ssSpam);
         normSpam = sqrt;
-        $display("Normalized Ham: %7.5f", normHam);
-        $display("Normalized Spam: %7.5f", normSpam);
+        cosHam = (prodHam)/(normHam*100);
+        cosSpam = (prodSpam)/(normSpam*100);
+
+        $display("Cosine Similarity w/ Ham: %7.2f", cosHam);
+        $display("Cosine Similarity w/ Ham: %7.2f", cosSpam);
+
 
         result = 0;
         // hamming(msgVector, hamVector, spamVector, result);
-        hamming(result);
+        out(result);
         //$display("%b", result);
     end
 
@@ -267,6 +275,27 @@ module main (msg, length, label, clk, reset, result);
         end
     endtask
 
+    task sumNsquareMsg;
+        real temp;
+        real sum1;
+        integer i1;
+
+        output real ssSpam;
+
+        begin
+            ssMsg = 0;
+            sum1 = 0;
+            for(i1=0; i1<DIM; i1 = i1 + 1) begin
+                temp = msgVector[i1];
+                sum1 = msgVector[i1]*temp;
+                ssMsg = ssMsg + sum1;
+            end
+            $display("Sum & Square Msg: %d", ssMsg);
+
+        end
+    endtask
+
+
     task dotprodHam;
         real sum;
         real temp1;
@@ -307,38 +336,54 @@ module main (msg, length, label, clk, reset, result);
         end
     endtask
 
-    task hamming;
-        // input [9999:0] msgVector, hamVector, spamVector;
+    task out;
         output [1:0] HamSpam;
 
-        integer countHam;
-        integer countSpam; 
-        integer i, j;
         begin
-            countHam = 0;
-            countSpam = 0;
-            for (i = 0; i < DIM; i = i + 1) begin
-                for (j = 0; j < 16 ; j = j + 1) begin
-                    if (msgVector[i][j] ^ hamVector[i][j] == 1) begin
-                        countHam = countHam + 1;
-                    end 
-                    if (msgVector[i][j] ^ spamVector[i][j] == 1) begin
-                        countSpam = countSpam + 1;
-                    end
-                end
+            if (cosHam>cosSpam) begin
+              HamSpam = 0;
             end
-            if (countHam > countSpam) begin
-                HamSpam = 0; // The prediction is Spam Message
-            end 
-            else if (countHam < countSpam) begin
-                HamSpam = 1; // The prediction is Ham Message
-            end 
+            else if (cosHam<cosSpam) begin
+              HamSpam = 1;
+            end
             else begin
-                HamSpam = -1; // It can't make a prediction
+              HamSpam = -1;
             end
-            $display("countSpam = %2.0f", countSpam);
-            $display("countHam = %2.0f", countHam);
         end
     endtask
+
+    // task hamming;
+    //     // input [9999:0] msgVector, hamVector, spamVector;
+    //     output [1:0] HamSpam;
+
+    //     integer countHam;
+    //     integer countSpam; 
+    //     integer i, j;
+    //     begin
+    //         countHam = 0;
+    //         countSpam = 0;
+    //         for (i = 0; i < DIM; i = i + 1) begin
+    //             for (j = 0; j < 16 ; j = j + 1) begin
+    //                 if (msgVector[i][j] ^ hamVector[i][j] == 1) begin
+    //                     countHam = countHam + 1;
+    //                 end 
+    //                 if (msgVector[i][j] ^ spamVector[i][j] == 1) begin
+    //                     countSpam = countSpam + 1;
+    //                 end
+    //             end
+    //         end
+    //         if (countHam > countSpam) begin
+    //             HamSpam = 0; // The prediction is Spam Message
+    //         end 
+    //         else if (countHam < countSpam) begin
+    //             HamSpam = 1; // The prediction is Ham Message
+    //         end 
+    //         else begin
+    //             HamSpam = -1; // It can't make a prediction
+    //         end
+    //         $display("countSpam = %2.0f", countSpam);
+    //         $display("countHam = %2.0f", countHam);
+    //     end
+    // endtask
 
 endmodule
