@@ -14,7 +14,7 @@ module main_tb();
 	parameter MESSAGE_LENGTH = 200;
 	parameter CHAR_LENGTH = 8;
 	parameter PATH_LENGTH = 16;
-	parameter NUMOF_TESTS = 100;
+	parameter NUMOF_TESTS = 10;
 
 	// iterable file paths
 	reg [CHAR_LENGTH*PATH_LENGTH-1:0] data_path_list [NUMOF_TESTS-1:0];

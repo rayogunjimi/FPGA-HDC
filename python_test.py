@@ -8,7 +8,7 @@ i = 0
 j = 0
 k = 0
 
-with open('./pythonCS/msg.txt') as x:
+with open('./msg.txt') as x:
    for line in x:
       msgVector.append(line)
 

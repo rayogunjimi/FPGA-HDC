@@ -118,7 +118,7 @@ module main (msg, length, label, clk, reset, result);
         cosSpam = (prodSpam)/(normSpam*100);
 
         $display("Cosine Similarity w/ Ham: %7.2f", cosHam);
-        $display("Cosine Similarity w/ Ham: %7.2f", cosSpam);
+        $display("Cosine Similarity w/ Spam: %7.2f", cosSpam);
 
 
         result = 0;
