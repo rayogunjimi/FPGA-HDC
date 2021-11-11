@@ -40,10 +40,6 @@ def create_path():
 	f_length.close()
 	f_tag.close()
 
-	# could delete if pythonCS folder is no longer needed in the project
-	if not os.path.exists("pythonCS"):
-		os.makedirs("pythonCS")
-
 def main():
 	NUMOF_TESTS = int(input("Please enter the number of tests you want to run: "))
 	with open('spam.csv', "r", encoding = "ISO-8859-1") as csv_file:
