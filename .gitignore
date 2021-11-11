@@ -3,7 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.out
-*.txt
+dictMem.txt
+refMem_Ham_Binary.txt
+refMem_Spam_Binary.txt
 *_dir/
 *_list/
 pythonCS/
