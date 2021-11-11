@@ -2,6 +2,12 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.out
+*.txt
+*_dir/
+*_list/
+pythonCS/
+utilities.py
 
 # C extensions
 *.so

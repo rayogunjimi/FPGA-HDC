@@ -14,7 +14,7 @@ module main_tb();
 	parameter MESSAGE_LENGTH = 200;
 	parameter CHAR_LENGTH = 8;
 	parameter PATH_LENGTH = 16;
-	parameter NUMOF_TESTS = 10;
+	parameter NUMOF_TESTS = 100;
 
 	// iterable file paths
 	reg [CHAR_LENGTH*PATH_LENGTH-1:0] data_path_list [NUMOF_TESTS-1:0];
@@ -34,9 +34,9 @@ module main_tb();
 
 	initial begin
 
-		data_inputs = $fopen("dir_list/data_gen.txt", "r");
-		tag_inputs = $fopen("dir_list/tag_gen.txt", "r");
-		length_inputs = $fopen("dir_list/length_gen.txt", "r");
+		data_inputs = $fopen("input_path_list/data_path.txt", "r");
+		tag_inputs = $fopen("input_path_list/tag_path.txt", "r");
+		length_inputs = $fopen("input_path_list/length_path.txt", "r");
         if (data_inputs == 0 || tag_inputs == 0 || length_inputs == 0) begin               //If inputs file is not found
             $display("Open files with ERROR");
             $finish;
