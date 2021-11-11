@@ -6,6 +6,7 @@ __pycache__/
 dictMem.txt
 refMem_Ham_Binary.txt
 refMem_Spam_Binary.txt
+msg.txt
 *_dir/
 *_list/
 pythonCS/
