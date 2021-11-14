@@ -51,11 +51,11 @@ module main_tb();
 			$readmemb(data_path_list [test_counter],inputreg_data);
 			$readmemb(tag_path_list [test_counter],inputreg_tag);
 			$readmemb(length_path_list [test_counter],inputreg_length);
-			#1;
+			#10000;
 			$display("expected label = %b", inputreg_tag[0]);
 			$display("actual label = %b", output_label);
 			if (-1 == output_label) begin
-				$display("incloncluive results.\n");
+				$display("inclonclusive results.\n");
 			end
 			else if (inputreg_tag[0] == output_label) begin
 				$display("results match.\n");
