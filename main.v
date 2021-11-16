@@ -330,10 +330,10 @@ module main (msg, length, label, clk, reset, result);
 
         begin
             if (cosHam>cosSpam) begin
-              HamSpam = 0;
+              HamSpam = 1;
             end
             else if (cosHam<cosSpam) begin
-              HamSpam = 1;
+              HamSpam = 0;
             end
             else begin
               HamSpam = -1;
