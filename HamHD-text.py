@@ -8,8 +8,8 @@ from sklearn.metrics import accuracy_score
 
 # Path to dataset file.
 f_ = './spam.csv'
-# f_ham = './refMem_Ham_Binary.txt'
-# file = './dictMem.txt'
+f = './refMem_Ham_Binary.txt'
+file = './dictMem.txt'
 
 # Read dataset from file and process into data and labels.
 def ReadCSV(f_path):
@@ -113,37 +113,32 @@ if __name__ == '__main__':
     X_train, X_test, Y_train, Y_test = train_test_split(X_, Y, test_size = 0.2, random_state = 556)
 
     dictMem = memGen(dim = dim, num_char = num_char)
-    #print(dictMem.shape)
-    #input()
     refMem = train(X_train, Y_train, dictMem, dim = dim)
-    
-    #Generate refMem_Ham and refMem_Spam
-    f_ham = open("./refMem_Ham_Binary.txt", "w")
-    for i in refMem[0]:
-        f_ham.write(format(int(i & 0xffff),"b").zfill(16) + "\n")
-    f_ham.close()
-        
-    f_spam = open("./refMem_Spam_Binary.txt","w")
-    for i in refMem[1]:
-        f_spam.write(format(int(i & 0xffff),"b").zfill(16) + "\n")
-    f_spam.close()
-
-    f_dict = open("./dictMem.txt","w")
-    for i in dictMem:
-        for j in i:
-            f_dict.write(format(int(j & 0xffff),"b").zfill(16) + "\n")
-    f_dict.close()
-
-    print(len(dictMem))
-    print(len(dictMem[0]))
     
     #print(cosine_similarity([refMem[0], refMem[1]]))
     acc = test(X_test, Y_test, dictMem, refMem, dim = dim)
     print(acc)
 
-##    while(epoch != 0):
-##        refMem = retrain(X_train, Y_train, dictMem, refMem, dim = dim)
-##        acc = test(X_test, Y_test, dictMem, refMem, dim = dim)
-##        print(acc)
-##        epoch -= 1
-    
+    while(epoch != 0):
+        refMem = retrain(X_train, Y_train, dictMem, refMem, dim = dim)
+        acc = test(X_test, Y_test, dictMem, refMem, dim = dim)
+        print(acc)
+        epoch -= 1
+
+    #Generate refMem_Ham and refMem_Spam
+    f_Ham = open("./refMem_Ham_Binary.txt", "w")
+    f_Spam = open("./refMem_Spam_Binary.txt","w")
+    f_dict = open("./dictMem.txt","w")
+    for i in refMem[0]:
+        f_Ham.write(format(int(i & 0xffff),"b").zfill(16) + "\n")
+    f_Ham.close()
+
+    for i in refMem[1]:
+        f_Spam.write(format(int(i & 0xffff),"b").zfill(16) + "\n")
+    f_Spam.close()
+
+    for i in dictMem:
+        for j in i:
+            f_dict.write(format(int(j & 0xffff),"b").zfill(16) + "\n")
+    f_dict.close()
+    print("done")
