@@ -14,7 +14,7 @@ module main_tb();
 	parameter MESSAGE_LENGTH = 200;
 	parameter CHAR_LENGTH = 8;
 	parameter PATH_LENGTH = 16;
-	parameter NUMOF_TESTS = 10;
+	parameter NUMOF_TESTS = 100;
 
 	// iterable file paths
 	reg [CHAR_LENGTH*PATH_LENGTH-1:0] data_path_list [NUMOF_TESTS-1:0];
@@ -46,12 +46,13 @@ module main_tb();
 			scan_data_inputs = $fscanf(data_inputs, "%s\n", data_path_list[test_counter]);
 			scan_tag_inputs = $fscanf(tag_inputs, "%s\n", tag_path_list[test_counter]);
 			scan_length_inputs = $fscanf(length_inputs, "%s\n", length_path_list[test_counter]);
-            $display ("Data :[inputs: %s]", data_path_list[test_counter]);
+            $display ("\n");
+			$display ("Data :[inputs: %s]", data_path_list[test_counter]);
 
 			$readmemb(data_path_list [test_counter],inputreg_data);
 			$readmemb(tag_path_list [test_counter],inputreg_tag);
 			$readmemb(length_path_list [test_counter],inputreg_length);
-			#10000;
+			#1000;
 			$display("expected label = %b", inputreg_tag[0]);
 			$display("actual label = %b", output_label);
 			if (-1 == output_label) begin
@@ -65,8 +66,11 @@ module main_tb();
 				$display("results do not match.\n");
 			end
 			test_counter = test_counter + 1;
+			$display("on test %3d of %3d", test_counter, NUMOF_TESTS);
+			$display("current accuracy = %2.2f%%", (correct_counter/test_counter)*100);
 		end // repeat
-		$display("accuracy = %2.2f%%", (correct_counter/NUMOF_TESTS)*100);
+		$display ("\n");
+		$display("final accuracy = %2.2f%%", (correct_counter/NUMOF_TESTS)*100);
 
 		$fclose(data_inputs);
 		$fclose(tag_inputs);
