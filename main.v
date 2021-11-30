@@ -19,24 +19,27 @@ module main (msg, length, label, clk, reset, result);
     integer k;
     integer k1;
 
-    real ssHam;
-    real ssSpam;
+    reg [63:0] ssHam;
+    reg [63:0] ssSpam;
     real ssMsg;
-    real prodHam;
-    real prodSpam;
-    real normHam;
-    real normSpam;
+    integer prodHam;
+    integer prodSpam;
+    integer normHam;
+    integer normSpam;
     real normMsg;
-    real sqrt;
-    real cosHam;
-    real cosSpam;
+    integer sqrt;
+    reg[63:0] prodHam1;
+    reg[63:0] prodSpam1;
+    integer cosSpam1;
+    integer cosHam;
+    integer cosSpam;
 
     output reg signed [1:0] result;
 
     integer i;
     integer seed = 15;
-    real sum;
-    real avg;
+    reg signed[31:0] sum;
+    // real avg;
 
     reg[7:0] letter;
     reg[7:0] lower_letter;
@@ -65,7 +68,7 @@ module main (msg, length, label, clk, reset, result);
 
     always @(msg or length or label) begin
         sum = 0;
-        avg = 0;
+        // avg = 0;
         // In the for loop, the range of i is from 0 to (total_bits of the message - 1)
         // 95 needs to be changed to a variable
         for (i = 0; i < length*8-1 ; i = i + BITS_PER_CHAR) begin 
@@ -114,11 +117,14 @@ module main (msg, length, label, clk, reset, result);
         normHam = sqrt;
         root(ssSpam);
         normSpam = sqrt;
-        cosHam = (prodHam)/(normHam*100);
-        cosSpam = (prodSpam)/(normSpam*100);
-
-        $display("Cosine Similarity w/ Ham: %7.2f", cosHam);
-        $display("Cosine Similarity w/ Spam: %7.2f", cosSpam);
+        prodHam1 = prodHam*1000;
+        prodSpam1 = prodSpam*1000;
+        cosHam = (prodHam1)/(normHam);
+        cosSpam = (prodSpam1)/(normSpam);
+        $display("ProdHam1: %d", prodHam1);
+        $display("ProdHam: %d", prodHam);
+        $display("Cosine Similarity w/ Ham: %d", cosHam);
+        $display("Cosine Similarity w/ Spam: %d", cosSpam);
 
 
         result = 0;
@@ -156,8 +162,10 @@ module main (msg, length, label, clk, reset, result);
 
     // Encode a message to an HV, message is an array of numbers 
     task encoding;
-        input [13:0] dim;
+        input signed[15:0] dim;
         integer i, j;
+        reg signed[31:0] temp;
+
         begin
 
             for (i = 0; i < dim; i = i + 1) begin // make HV all zeros
@@ -174,14 +182,15 @@ module main (msg, length, label, clk, reset, result);
                 end 
             end
             $display(sum);
-            avg = sum / dim; // Calculate average
-            $display(avg);
+            // avg = sum / dim; // Calculate average
+            // $display(avg);
 
             for (i = 0; i < dim; i = i + 1) begin // Do comparison
-                if ( HV[i] > avg) begin
+                temp = HV[i]*dim;
+                if ( temp > sum) begin
                     HV[i] = 1;
                 end 
-                else if ( HV[i] < avg) begin
+                else if ( temp < sum) begin
                     HV[i] = -1;
                 end 
                 else begin
@@ -225,11 +234,11 @@ module main (msg, length, label, clk, reset, result);
     endtask
 
     task sumNsquareHam;
-        real temp;
-        real sum1;
+        reg signed[63:0] temp;
+        reg signed[63:0] sum1;
         integer i1;
 
-        output real ssHam;
+        output reg signed[63:0] ssHam;
 
         begin
             ssHam = 0;
@@ -245,11 +254,11 @@ module main (msg, length, label, clk, reset, result);
     endtask
 
     task sumNsquareSpam;
-        real temp;
-        real sum1;
+        reg signed[63:0] temp;
+        reg signed[63:0] sum1;
         integer i1;
 
-        output real ssSpam;
+        output reg signed[63:0] ssSpam;
 
         begin
             ssSpam = 0;
@@ -286,12 +295,12 @@ module main (msg, length, label, clk, reset, result);
 
 
     task dotprodHam;
-        real sum;
-        real temp1;
-        real temp2;
+        integer sum;
+        integer temp1;
+        integer temp2;
         integer i2;
 
-        output real prodHam;
+        output integer prodHam;
         begin
             sum = 0;
             prodHam = 0;
@@ -306,12 +315,12 @@ module main (msg, length, label, clk, reset, result);
     endtask
 
     task dotprodSpam;
-        real sum;
-        real temp1;
-        real temp2;
+        integer sum;
+        integer temp1;
+        integer temp2;
         integer i2;
 
-        output real prodSpam;
+        output integer prodSpam;
         begin
             sum = 0;
             prodSpam = 0;
