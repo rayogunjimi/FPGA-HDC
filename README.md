@@ -16,9 +16,10 @@ FPGA-Based Accelerator For Hyperdimensional Computing (HDC)
  - Use VSCode to open the project folder. Open the "main_tb.v" file and press the green button, "Verilog: Run Verilog HDL Code," on the upper right corner to execute the Verilog file. Users can define the number of tests they are willing to execute in line 17 by changing the value for parameter NUMOF_TESTS, which is by default 10.
 
  ### Features in Progress
- - Add automated installer shell scripts for Linux and Mac.
+ - Add automated installer shell scripts for Linux and Mac
  - Add instructions to run from source on Vivado 
- - Test flashing synthesized source onto FPGA.
+ - Test flashing synthesized source onto FPGA
+ - Move source files to src folder
 
  ### Disclaimer
  - This capstone project was created for academic purposes at Villanova University 
