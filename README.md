@@ -1,7 +1,7 @@
 # FPGA-HDC
 FPGA-Based Accelerator For Hyperdimensional Computing (HDC)
 
-## Instructions
+## Contribution/Testing Instructions
 
  ### Installing pre-requisites
  - The training application runs under Python 3, and requires the following packages: pandas, numpy, scikit-learn and matplotlib. Please have the Python version 3.9 installed. 
@@ -12,8 +12,12 @@ FPGA-Based Accelerator For Hyperdimensional Computing (HDC)
  - The SMS ham/spam dataset can be obtained from Kaggle at: https://www.kaggle.com/uciml/sms-spam-collection-dataset
  - Run the "run_python_program.bat" as administrator to transform the dataset in csv file to usable files in Verilog and to record both the Dictionary Memory and the Reference Memory used during the training phase. We will load the dict_mem and ref_mem to our Verilog inference phase later on.
 
- ### Run the application
- - Use VSCode to open the project folder. Open the "main_tb.v" file and press the green button, "Verilog: Run Verilog HDL Code," on the upper right corner to execute the Verilog file. Users can define the number of tests they are willing to execute in line 17 by changing the value for parameter NUMOF_TESTS, which is by default 10.
+ ### Simulating using testbench
+ - If using VSCode, please open the project folder. Open the "main_tb.v" file and press the green button, "Verilog: Run Verilog HDL Code," on the upper right corner to execute the Verilog file. Users can define the number of tests they are willing to execute in line 17 by changing the value for parameter NUMOF_TESTS, which is by default 10.
+ - If using a different editor, simulation please see specific verilog simulation instructions to execute main_tb.v file.
+
+ ### Synthesizing and/or Flashing
+  - Please see instructions specific to your synthesis or flashing tool.
 
  ### Features in Progress
  - Add automated installer shell scripts for Linux and Mac
